@@ -1,7 +1,9 @@
 let express = require('express');
 let jsdom = require('jsdom');
+let database = require('./database.js');
 
 let app = express.Router();
+let db = database.connect_db();
 
 // midwire
 app.use(function(req, res, next){
@@ -29,6 +31,10 @@ app.get("/", function(req, res){
     }
     function next2(){
     }
+});
+
+app.get("/test/create_db", function(req, res){
+    database.create_tables(db);
 });
 
 
