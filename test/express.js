@@ -1,9 +1,9 @@
-let except = require('except');
+let expect = require('expect.js');
 
 let express = require('express');
 
 describe('express', function(){
     it('exist', function(){
-        except(express).not.eql(null);
+        expect(express).not.eql(null);
     });
 });
