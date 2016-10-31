@@ -1,6 +1,8 @@
 let express = require('express');
 let jsdom = require('jsdom');
 let database = require('./database.js');
+let promise = require('promise');
+let fs = require('fs');
 
 let app = express.Router();
 let db = database.connect_db();
@@ -12,25 +14,31 @@ app.use(function(req, res, next){
     next();
 });
 
+function jsdom_pre_render(html, state, cb){
+    if(cb == undefined){
+        cb = state;
+        state = undefined;
+    }
+    jsdom.env({
+        html: html,
+        features: {},
+        done: function(err, window){
+            if(err){throw err;}
+            window.pre_render(state);
+            cb(jsdom.serializeDocument(window.document));
+        }
+    });
+}
 
 app.get("/", function(req, res){
-    jsdom.env({
-        file: "index.html",
-        features: {
-            // FetchExternalResources : ['script'],
-            // ProcessExternalResources : ['script']
-        },
-        done: next
+    new promise(function(cb){
+        fs.readFile("index.html", function(err,content){cb(content);});
+    }).then(function(content){
+        return new promise(function(cb){
+            jsdom_pre_render(content, cb);
+    });}).then(function(content){
+        res.end(content);
     });
-    function next(err, window){
-        if(err){
-            res.status(404).end();
-        }
-        console.log(window.pre_render());
-        res.end(jsdom.serializeDocument(window.document));
-    }
-    function next2(){
-    }
 });
 
 app.get("/test/create_db", function(req, res){
