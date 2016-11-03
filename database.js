@@ -9,8 +9,8 @@ function create_tables(db, cb){
     db.exec(
         'create table text_origin ('+
             ' id int,'+
-            ' chapter int'+
-            ' block_id int'+
+            ' chapter int,'+
+            ' block_id int,'+
             ' type char(10),'+
             ' content text'+
             ')'
@@ -42,8 +42,8 @@ function drop_tables(db, cb){
 
 function insert_text_origin(db, chapter, block, type, content, cb){
     db.run('insert into text_origin'+
-            '(chapter, block_id, type, content)'+
-            'values(?,?,?,?)',
+           '(chapter, block_id, type, content)'+
+           'values(?,?,?,?)',
             chapter, block, type, content,
             cb
            );
