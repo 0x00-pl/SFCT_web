@@ -10,7 +10,7 @@ function create_tables(db, cb){
         'create table text_origin ('+
             ' id int,'+
             ' chapter int'+
-            ' block int'+
+            ' block_id int'+
             ' type char(10),'+
             ' content text'+
             ')'
@@ -40,16 +40,19 @@ function drop_tables(db, cb){
     );
 }
 
-function add_text_origin(db, chapter, block, type, content){
-    db.exec('insert into text_origin'+
-            '(chapter, block, type, content)'+
-            'values(?,?,?,?,?)',
+function insert_text_origin(db, chapter, block, type, content, cb){
+    db.run('insert into text_origin'+
+            '(chapter, block_id, type, content)'+
+            'values(?,?,?,?)',
             chapter, block, type, content,
             cb
            );
 }
 
 module.exports = {
-    connect_db: connect_db,
-    create_tables: create_tables
+    connect_db,
+    create_tables,
+    drop_tables,
+    insert_text_origin
+
 };
