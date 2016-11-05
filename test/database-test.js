@@ -1,6 +1,6 @@
 let expect = require('expect.js');
 let promise = require('promise');
-let database = require('../database.js');
+let database = require('../src/database.js');
 
 describe("databse", function(){
     it('create database', function(done){

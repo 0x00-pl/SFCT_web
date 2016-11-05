@@ -1,6 +1,6 @@
 
 let express = require('express');
-let app = require('./app');
+let app = require('./src/app');
 
 let server = express();
 

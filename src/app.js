@@ -32,7 +32,7 @@ function jsdom_pre_render(html, state, cb){
 
 app.get("/", function(req, res){
     new promise(function(cb){
-        fs.readFile("index.html", function(err,content){cb(content);});
+        fs.readFile("static/index.html", function(err,content){cb(content);});
     }).then(function(content){
         return new promise(function(cb){
             jsdom_pre_render(content, cb);
