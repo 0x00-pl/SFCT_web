@@ -30,7 +30,7 @@ function jsdom_pre_render(html, state, cb){
     });
 }
 
-app.get("/", function(req, res){
+app.get("/index.html", function(req, res){
     new promise(function(cb){
         fs.readFile("static/index.html", function(err,content){cb(content);});
     }).then(function(content){
@@ -41,8 +41,18 @@ app.get("/", function(req, res){
     });
 });
 
+app.get("/api/restful/chapter/:chapter/", function(req, res){
+    console.log('in', req.params.chapter);
+    database.select_text_origin(db, req.params.chapter, function(err, rows){
+        if(err){console.log(err);throw err;}
+        res.json(rows);
+    });
+});
+
 app.get("/test/create_db", function(req, res){
-    database.create_tables(db);
+    database.create_tables(db, function(err){
+        res.end("with"+JSON.stringify(err));
+    });
 });
 
 

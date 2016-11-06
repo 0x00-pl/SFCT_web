@@ -40,19 +40,28 @@ function drop_tables(db, cb){
     );
 }
 
+function select_text_origin(db, chapter, cb){
+    db.all('select * from text_origin '+
+           'where chapter=? '+
+           'limit ? ',
+           chapter, 1000,
+           cb
+          );
+}
 function insert_text_origin(db, chapter, block, type, content, cb){
     db.run('insert into text_origin'+
            '(chapter, block_id, type, content)'+
            'values(?,?,?,?)',
-            chapter, block, type, content,
-            cb
-           );
+           chapter, block, type, content,
+           cb
+          );
 }
 
 module.exports = {
     connect_db,
     create_tables,
     drop_tables,
+    select_text_origin,
     insert_text_origin
 
 };
