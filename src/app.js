@@ -24,7 +24,7 @@ function jsdom_pre_render(html, state, cb){
         features: {},
         done: function(err, window){
             if(err){throw err;}
-            window.pre_render(state);
+            if(window.pre_render){ window.pre_render(state); }
             cb(jsdom.serializeDocument(window.document));
         }
     });
