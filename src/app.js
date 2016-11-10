@@ -36,7 +36,20 @@ app.get("/index.html", function(req, res){
     }).then(function(content){
         return new promise(function(cb){
             jsdom_pre_render(content, cb);
-    });}).then(function(content){
+        });
+    }).then(function(content){
+            res.end(content);
+        });
+});
+
+app.get("/detail/:chapter", function(req, res){
+    new promise(function(cb){
+        fs.readFile("static/detail.html", function(err,content){cb(content);});
+    }).then(function(content){
+        return new promise(function(cb){
+            jsdom_pre_render(content, cb);
+        });
+    }).then(function(content){
         res.end(content);
     });
 });
