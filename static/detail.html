@@ -10,6 +10,22 @@
          //function pre_render(state){
          //    document.body.innerHTML = "hello world!";
          //}
+
+         window.chapter = 0;  // TODO
+
+         $(function(){
+             $.ajax({
+                 url: '/api/restful/chapter/'+chapter,
+                 type: 'get',
+                 dataType: 'json',
+                 cache: false,
+                 success: load_chapter_content_success,
+                 async:true,
+             });
+         })
+         function load_chapter_content_success(data){
+             // TODO fill page
+         }
         </script>
     </body>
 </html>
