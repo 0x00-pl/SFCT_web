@@ -5,6 +5,21 @@ function connect_db(db_name='SFCT.sqlite3'){
     return new sqlite3.Database(db_name);
 }
 
+function accumulate_args(cb){
+    return function(){
+        let args = [].slice.call(arguments);
+        return cb(args);
+    };
+}
+
+function debug_pipe(cb){
+    return function(){
+        let args = [].slice.call(arguments);
+        console.log(args);
+        return cb.apply(this, args);
+    };
+}
+
 function create_tables(db, cb){
     db.exec(
         'create table text_origin ('+
@@ -43,17 +58,17 @@ function drop_tables(db, cb){
 function select_text_origin(db, chapter, cb){
     db.all('select * from text_origin '+
            'where chapter=? '+
-           'limit ? ',
+           'limit ?;',
            chapter, 1000,
-           cb
+           accumulate_args(cb)
           );
 }
 function insert_text_origin(db, chapter, block, type, content, cb){
     db.run('insert into text_origin'+
            '(chapter, block_id, type, content)'+
-           'values(?,?,?,?)',
+           'values(?,?,?,?);',
            chapter, block, type, content,
-           cb
+           accumulate_args(cb)
           );
 }
 

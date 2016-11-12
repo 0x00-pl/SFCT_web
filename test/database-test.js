@@ -21,8 +21,22 @@ describe("databse", function(){
             database.drop_tables(db, done);
         });
         describe('text_origin', function(){
-            it('insert', function(done){
-                database.insert_text_origin(db, 0, 0, 'code', 'Definiation', done);
+            it('insert-select', function(done){
+                (new promise(function(resolve){
+                    database.insert_text_origin(db, 0, 0, 'code', 'Definiation', (err,val)=>resolve([err,val]));
+                })).then(function([err, value]){
+                    return new promise(function(resolve){
+                        database.select_text_origin(db, 0, resolve);
+                    });
+                }).then(function([err, value]){
+                    let r = [ { id: null,
+                                chapter: 0,
+                                block_id: 0,
+                                type: 'code',
+                                content: 'Definiation' } ];
+                    expect(value).eql(r);
+                    done();
+                });
             });
         });
     });
