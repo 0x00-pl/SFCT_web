@@ -20,10 +20,25 @@ describe("databse", function(){
         after(function(done){
             database.drop_tables(db, done);
         });
+        describe('chapter', function(){
+            it('insert-select', function(done){
+                (new promise(function(resolve){
+                    database.insert_text_index(db, 0, 'cpt#0', resolve);
+                })).then(function([err, value]){
+                    return new promise(function(resolve){
+                        database.select_text_index(db, resolve);
+                    });
+                }).then(function([err,value]){
+                    let r = [{id:0, name:'cpt#0'}];
+                    expect(value).eql(r);
+                    done();
+                });
+            });
+        });
         describe('text_origin', function(){
             it('insert-select', function(done){
                 (new promise(function(resolve){
-                    database.insert_text_origin(db, 0, 0, 'code', 'Definiation', (err,val)=>resolve([err,val]));
+                    database.insert_text_origin(db, 0, 0, 'code', 'Definiation', resolve);
                 })).then(function([err, value]){
                     return new promise(function(resolve){
                         database.select_text_origin(db, 0, resolve);

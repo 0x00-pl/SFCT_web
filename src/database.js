@@ -96,7 +96,8 @@ module.exports = {
     connect_db,
     create_tables,
     drop_tables,
+    insert_text_origin,
     select_text_origin,
-    insert_text_origin
-
+    insert_text_index,
+    select_text_index
 };
