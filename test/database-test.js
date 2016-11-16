@@ -29,8 +29,7 @@ describe("databse", function(){
                         database.select_text_origin(db, 0, resolve);
                     });
                 }).then(function([err, value]){
-                    let r = [ { id: null,
-                                chapter: 0,
+                    let r = [ { chapter_id: 0,
                                 block_id: 0,
                                 type: 'code',
                                 content: 'Definiation' } ];

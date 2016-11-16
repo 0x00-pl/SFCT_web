@@ -22,18 +22,22 @@ function debug_pipe(cb){
 
 function create_tables(db, cb){
     db.exec(
-        'create table text_origin ('+
-            ' id int,'+
-            ' chapter int,'+
-            ' block_id int,'+
-            ' type char(10),'+
-            ' content text'+
-            ')'
-    ).exec(
         'create table user ('+
             ' id int,'+
             ' name text,'+
             ' info text'+
+            ')'
+    ).exec(
+        'create table chapter ('+
+            ' id int,'+
+            ' name text'+
+            ')'
+    ).exec(
+        'create table text_origin ('+
+            ' chapter_id int,'+
+            ' block_id int,'+
+            ' type char(10),'+
+            ' content text'+
             ')'
     ).exec(
         'create table trans_zhcn ('+
@@ -46,28 +50,44 @@ function create_tables(db, cb){
 
 function drop_tables(db, cb){
     db.exec(
-        'drop table text_origin'
-    ).exec(
         'drop table user'
+    ).exec(
+        'drop table chapter'
+    ).exec(
+        'drop table text_origin'
     ).exec(
         'drop table trans_zhcn',
         cb
     );
 }
 
-function select_text_origin(db, chapter, cb){
+function select_text_origin(db, chapter_id, cb){
     db.all('select * from text_origin '+
-           'where chapter=? '+
+           'where chapter_id=? '+
            'limit ?;',
-           chapter, 1000,
+           chapter_id, 1000,
            accumulate_args(cb)
           );
 }
-function insert_text_origin(db, chapter, block, type, content, cb){
-    db.run('insert into text_origin'+
-           '(chapter, block_id, type, content)'+
+function insert_text_origin(db, chapter_id, block, type, content, cb){
+    db.run('insert into text_origin '+
+           '(chapter_id, block_id, type, content) '+
            'values(?,?,?,?);',
-           chapter, block, type, content,
+           chapter_id, block, type, content,
+           accumulate_args(cb)
+          );
+}
+function select_text_index(db, cb){
+    db.all('select * from chapter '+
+           'limit ?;', 1000,
+           accumulate_args(cb)
+          );
+}
+function insert_text_index(db, _id, name, cb){
+    db.run('insert into chapter '+
+           '(id, name) '+
+           'values(?,?);',
+           _id, name,
            accumulate_args(cb)
           );
 }
