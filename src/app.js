@@ -5,7 +5,7 @@ let promise = require('promise');
 let fs = require('fs');
 
 let app = express.Router();
-let db = database.connect_db();
+let api_router = require('./api.js');
 
 // midwire
 app.use(function(req, res, next){
@@ -54,13 +54,7 @@ app.get("/detail/:chapter", function(req, res){
     });
 });
 
-app.get("/api/restful/chapter/:chapter/", function(req, res){
-    console.log('in', req.params.chapter);
-    database.select_text_origin(db, req.params.chapter, function(err, rows){
-        if(err){console.log(err);throw err;}
-        res.json(rows);
-    });
-});
+app.use("/api", api_router);
 
 app.get("/test/create_db", function(req, res){
     database.create_tables(db, function(err){
