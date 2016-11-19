@@ -1,6 +1,7 @@
 let expect = require('expect.js');
 let promise = require('promise');
 let database = require('../src/database.js');
+let ccb = require('../src/ccb.js');
 
 describe("databse", function(){
     it('create database', function(done){
@@ -51,6 +52,20 @@ describe("databse", function(){
                     expect(value).eql(r);
                     done();
                 });
+            });
+            it('insert-select-ccb', function(done){
+                ccb(function(cb){
+                    database.insert_text_origin(db, 1, 0, 'comment', '(*text*)', cb);
+                }).then(function([err,value], cb){
+                    database.select_text_origin(db, 1, cb);
+                }).then(function([err,value]){
+                    expect(value).eql([ { chapter_id: 1,
+                                          block_id: 0,
+                                          type: 'comment',
+                                          content: '(*text*)'
+                                        } ]);
+                    done();
+                }).end()();
             });
         });
     });
