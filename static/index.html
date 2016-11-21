@@ -1,9 +1,19 @@
 <html>
     <head>
+        <script src="/jquery.js"></script>
+        <script>
+         $(function(){
+             $.ajax("/api/index")
+              .done(
+                  function(data){
+                      $("#page_list").text(data)
+                  })
+         })
+        </script>
     </head>
     <body>
         <div class="header">header</div>
-        <div class="main">loading index</div>
+        <div class="main"><div id="page_list">loading index</div></div>
         <div class="footer">footer</div>
 
         <script>

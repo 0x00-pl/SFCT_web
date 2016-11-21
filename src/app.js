@@ -3,6 +3,7 @@ let jsdom = require('jsdom');
 let database = require('./database.js');
 let promise = require('promise');
 let fs = require('fs');
+let ccb = require('./ccb.js');
 
 let app = express.Router();
 let api_router = require('./api.js');
@@ -52,6 +53,15 @@ app.get("/detail/:chapter", function(req, res){
     }).then(function(content){
         res.end(content);
     });
+});
+
+app.get("/jquery.js", function(req, res){
+    ccb(function(cb){
+        fs.readFile("static/jquery.js", cb);
+    }).then(function(err, content){
+        if(err){res.status(404).end();}
+        res.end(content);
+    }).end()();
 });
 
 app.use("/api", api_router);
