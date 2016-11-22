@@ -23,5 +23,12 @@ api_router.get("/init/create_db", function(req, res){
         res.end("with"+JSON.stringify(err));
     });
 });
+api_router.get("/init/insert_test_data", function(req, res){
+    ccb(function(cb){
+        database.insert_text_index(cb, 0, "chapter#0", cb);
+    }).then(function([err,value]){
+        res(end);
+    }).end();
+});
 
 module.exports = api_router;
