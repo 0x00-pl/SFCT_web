@@ -1,5 +1,6 @@
 let express = require('express');
 let database = require('./database.js');
+let ccb = require('./ccb.js');
 
 
 let api_router = express.Router();
@@ -25,10 +26,12 @@ api_router.get("/init/create_db", function(req, res){
 });
 api_router.get("/init/insert_test_data", function(req, res){
     ccb(function(cb){
-        database.insert_text_index(cb, 0, "chapter#0", cb);
+        database.insert_text_index(db, 0, "chapter#0", cb);
+    }).then(function([err,value], cb){
+        database.insert_text_origin(db, 0, 0, 'text', '(*text in chapter #0*)', cb);
     }).then(function([err,value]){
-        res(end);
-    }).end();
+        res.end();
+    }).end()();
 });
 
 module.exports = api_router;

@@ -66,11 +66,6 @@ app.get("/jquery.js", function(req, res){
 
 app.use("/api", api_router);
 
-app.get("/test/create_db", function(req, res){
-    database.create_tables(db, function(err){
-        res.end("with"+JSON.stringify(err));
-    });
-});
 
 
 module.exports = app;

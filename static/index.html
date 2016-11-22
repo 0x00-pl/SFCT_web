@@ -3,10 +3,32 @@
         <script src="/jquery.js"></script>
         <script>
          $(function(){
+             let tpl = {}
+             tpl.page_list_item = function(){
+                 let t = $('<div class="page_list_item"> \
+                              <div class="page_list_item_index"></div> \
+                              <div class="page_list_item_name"></div> \
+                            </div>')
+                 return function(idx, name){
+                     let r = t.clone()
+                     r.find(".page_list_item_index").text(idx)
+                     r.find(".page_list_item_name").text(name)
+                     return r
+                 }
+             }()
+             window.tpl = tpl
+         });
+         $(function(){
              $.ajax("/api/index")
               .done(
                   function(data){
-                      $("#page_list").text(data)
+                      window.data = data
+                      console.log(data)
+                      data.forEach(function(v,i){
+                          window.tpl
+                                .page_list_item(v.id, v.name)
+                                .appendTo("#page_list")
+                      })
                   })
          })
         </script>
