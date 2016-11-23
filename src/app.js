@@ -55,14 +55,18 @@ app.get("/detail/:chapter", function(req, res){
     });
 });
 
-app.get("/jquery.js", function(req, res){
-    ccb(function(cb){
-        fs.readFile("static/jquery.js", cb);
-    }).then(function(err, content){
-        if(err){res.status(404).end();}
-        res.end(content);
-    }).end()();
-});
+function static_file(file_name){
+    app.get("/"+file_name, function(req, res){
+        ccb(function(cb){
+            fs.readFile("static/"+file_name, cb);
+        }).then(function(err, content){
+            if(err){res.status(404).end();}
+            res.end(content);
+        }).end()();
+    });
+}
+static_file("jquery.js");
+static_file("main.css");
 
 app.use("/api", api_router);
 

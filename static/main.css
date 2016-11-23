@@ -1,0 +1,22 @@
+
+.main{
+    width: 1024px;
+    margin: 0 auto;
+    text-align: center;
+    border: 3px solid lightgray;
+
+}
+
+.page_list_item{
+    border-bottom: 1px solid lightcyan;
+}
+
+.page_list_item_index, .page_list_item_name{
+    display: inline-block;
+
+}
+.page_list_item_index{
+    float: left;
+    margin-left: 1rem;
+}
+

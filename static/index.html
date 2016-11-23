@@ -1,5 +1,6 @@
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="/main.css" />
         <script src="/jquery.js"></script>
         <script>
          $(function(){
@@ -7,12 +8,13 @@
              tpl.page_list_item = function(){
                  let t = $('<div class="page_list_item"> \
                               <div class="page_list_item_index"></div> \
-                              <div class="page_list_item_name"></div> \
+                              <a><div class="page_list_item_name"></div></a> \
                             </div>')
                  return function(idx, name){
                      let r = t.clone()
                      r.find(".page_list_item_index").text(idx)
                      r.find(".page_list_item_name").text(name)
+                     r.find("a").attr("href", "/detail/"+idx)
                      return r
                  }
              }()
@@ -22,12 +24,12 @@
              $.ajax("/api/index")
               .done(
                   function(data){
-                      window.data = data
-                      console.log(data)
+                      let page_list = $("#page_list")
+                      page_list.empty()
                       data.forEach(function(v,i){
-                          window.tpl
-                                .page_list_item(v.id, v.name)
-                                .appendTo("#page_list")
+                          page_list.append(
+                              window.tpl.page_list_item(v.id, v.name)
+                          )
                       })
                   })
          })
@@ -45,3 +47,4 @@
         </script>
     </body>
 </html>
+
