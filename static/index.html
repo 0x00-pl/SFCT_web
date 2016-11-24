@@ -20,18 +20,18 @@
              }()
              window.tpl = tpl
          });
+
          $(function(){
              $.ajax("/api/index")
-              .done(
-                  function(data){
-                      let page_list = $("#page_list")
-                      page_list.empty()
-                      data.forEach(function(v,i){
-                          page_list.append(
-                              window.tpl.page_list_item(v.id, v.name)
-                          )
-                      })
+              .done(function(data){
+                  let page_list = $("#page_list")
+                  page_list.empty()
+                  data.forEach(function(v,i){
+                      page_list.append(
+                          window.tpl.page_list_item(v.id, v.name)
+                      )
                   })
+              })
          })
         </script>
     </head>

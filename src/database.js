@@ -23,13 +23,13 @@ function debug_pipe(cb){
 function create_tables(db, cb){
     db.exec(
         'create table user ('+
-            ' id int,'+
+            ' id int primary key,'+
             ' name text,'+
             ' info text'+
             ')'
     ).exec(
         'create table chapter ('+
-            ' id int,'+
+            ' id int primary key,'+
             ' name text'+
             ')'
     ).exec(
@@ -37,11 +37,13 @@ function create_tables(db, cb){
             ' chapter_id int,'+
             ' block_id int,'+
             ' type char(10),'+
-            ' content text'+
+            ' content text,'+
+            ' primary key (chapter_id, block_id)'+
             ')'
     ).exec(
         'create table trans_zhcn ('+
-            ' id int,'+
+            ' id int primary key,'+
+            ' chapter_id int,'+
             ' text_origin_id int,'+
             ' user_id int,'+
             ' content text'+
@@ -77,6 +79,22 @@ function insert_text_origin(db, chapter_id, block, type, content, cb){
            accumulate_args(cb)
           );
 }
+function select_text_zhcn(db, chapter_id, cb){
+    db.all('select * from text_zhcn '+
+           'where chapter_id=? '+
+           'limit ?;',
+           chapter_id, 1000,
+           accumulate_args(cb)
+          );
+}
+function insert_text_zhcn(db, chapter_id, block, type, content, cb){
+    db.run('insert into text_zhcn '+
+           '(chapter_id, block_id, type, content) '+
+           'values(?,?,?,?);',
+           chapter_id, block, type, content,
+           accumulate_args(cb)
+          );
+}
 function select_text_index(db, cb){
     db.all('select * from chapter '+
            'limit ?;', 1000,
@@ -98,6 +116,8 @@ module.exports = {
     drop_tables,
     insert_text_origin,
     select_text_origin,
+    insert_text_zhcn,
+    select_text_zhcn,
     insert_text_index,
     select_text_index
 };

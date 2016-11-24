@@ -1,9 +1,41 @@
 <html>
     <head>
+        <link rel="stylesheet" type="text/css" href="/main.css" />
+        <script src="/jquery.js"></script>
+        <script>
+         $(function(){
+             let tpl = {}
+             tpl.origin_block = function(){
+                 let t = $('<div class="block_origin"> \
+                                <div class="block_origin_content"></div> \
+                            </div>')
+                 return function(block_id, block_type, content){
+                     let r = t.clone()
+                     r.find('.block_origin_content').text(content)
+                     return r
+                 }
+             }()
+             window.tpl = tpl
+         })
+
+         $(function(){
+             let chapter_id = window.location.pathname
+                                    .match('/detail/([0-9]+)')[1]|0
+             $.ajax('/api/chapter/'+chapter_id)
+              .done(function(data){
+                  let block_list = $('#block_list')
+                  block_list.empty()
+                  block_list.text(data)
+                  block_list.text(data[0])
+              })
+         })
+        </script>
     </head>
     <body>
-        <div class="header">header</div>
-        <div class="main">loading detail</div>
+        <div class="header"><div><a href="/index.html">Home</a></div></div>
+        <div class="main"><div id="block_list">
+            loading detail
+        </div></div>
         <div class="footer">footer</div>
 
         <script>
