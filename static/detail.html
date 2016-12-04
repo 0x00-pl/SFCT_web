@@ -15,20 +15,38 @@
                      return r
                  }
              }()
+             tpl.zhcn_block = function(){
+                 let t = $('<div class="block_zhcn"> \
+                                <div class="block_zhcn_edit_button">edit</div> \
+                                <div class="block_zhcn_content_list"></div> \
+                            </div>')
+                 let content_box = $('<div class="block_zhcn_content"></div>')
+                 return function(content_list){
+                     let r = t.clone()
+                     let box_list = r.find('block_zhcn_content_list')
+                     content_list.forEach(function(v){
+                         let box = content_box.clone()
+                         box.text(v)
+                         box_list.append(box)
+                     })
+                     return r
+                 }
+             }()
+             tpl.make_block = function(){
+                 let t = $('<div class="block"></div>')
+                 return function(block){
+                     let r = t.clone()
+                     let {extra, origin, type, i18n} = block
+                     r.append(tpl.origin_block(extra.block_id, type, origin))
+                     if(type == 'text'){
+                         r.append(tpl.zhcn_block(i18n))
+                     }
+                     return r
+                 }
+             }()
              window.tpl = tpl
          })
 
-         $(function(){
-             let chapter_id = window.location.pathname
-                                    .match('/detail/([0-9]+)')[1]|0
-             $.ajax('/api/chapter/'+chapter_id)
-              .done(function(data){
-                  let block_list = $('#block_list')
-                  block_list.empty()
-                  block_list.text(data)
-                  block_list.text(data[0])
-              })
-         })
         </script>
     </head>
     <body>
@@ -43,11 +61,12 @@
          //    document.body.innerHTML = "hello world!";
          //}
 
-         window.chapter = 0;  // TODO
+         window.chapter = window.location.pathname
+                                .match('/detail/([0-9]+)')[1]|0
 
          $(function(){
              $.ajax({
-                 url: '/api/restful/chapter/'+chapter,
+                 url: '/api/chapter/'+chapter,
                  type: 'get',
                  dataType: 'json',
                  cache: false,
@@ -56,7 +75,11 @@
              });
          })
          function load_chapter_content_success(data){
-             // TODO fill page
+             let block_list = $('#block_list')
+             block_list.empty()
+             data.forEach(function(v){
+                 block_list.append(window.tpl.make_block(v))
+             })
          }
         </script>
     </body>

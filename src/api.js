@@ -12,11 +12,44 @@ api_router.get("/index", function(req, res){
         res.json(rows);
     });
 });
+
 api_router.get("/chapter/:chapter", function(req, res){
-    database.select_text_origin(db, req.params.chapter, function(err, rows){
+    let blocks = [];
+    let blocks_size = 0;
+
+    function make_block(origin, i18n_list){
+        if(origin.type == 'text'){
+            return {"origin": origin.content, "type": "text", "i18n": i18n_list, "extra": origin};
+        }else{
+            return {"origin": origin.content, "type": origin.type, "extra": origin};
+        }
+    }
+
+    ccb(function(cb){
+        database.select_text_origin(db, req.params.chapter, cb);
+    }).then(function([err, rows], cb){
         if(err){console.log(err);throw err;}
-        res.json(rows);
-    });
+        let n = rows.length;
+        rows.forEach(function(v,i){
+            if(v.type == 'text'){
+                database.select_i18n_zhcn(db, v.content, function([err,rows]){
+                    if(err){rows = [v.content];}
+                    blocks[i] = make_block(v, rows);
+                    cb(n);
+                });
+            }else{
+                blocks[i] = make_block(v, "[debug]: make_block.");
+                cb(n);
+            }
+        });
+    }).then(function(n, cb){
+        blocks_size += 1;
+        if(blocks_size >= n){
+            cb();
+        }
+    }).then(function(cb){
+        res.json(blocks);
+    }).end()();
 });
 
 api_router.get("/init/create_db", function(req, res){

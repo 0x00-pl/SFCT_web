@@ -10,8 +10,7 @@ let api_router = require('./api.js');
 
 // midwire
 app.use(function(req, res, next){
-    console.log("URL : ", req.url);
-    console.log("Mode: ", req.method);
+    console.log("LOG : ", req.method, req.url);
     next();
 });
 
