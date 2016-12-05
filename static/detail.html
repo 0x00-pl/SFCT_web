@@ -23,7 +23,7 @@
                  let content_box = $('<div class="block_zhcn_content"></div>')
                  return function(content_list){
                      let r = t.clone()
-                     let box_list = r.find('block_zhcn_content_list')
+                     let box_list = r.find('.block_zhcn_content_list')
                      content_list.forEach(function(v){
                          let box = content_box.clone()
                          box.text(v)
