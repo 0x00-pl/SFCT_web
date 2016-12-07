@@ -20,3 +20,24 @@
     margin-left: 1rem;
 }
 
+.block{
+    display: block;
+    border-bottom: 2px solid lightgray;
+}
+
+.block_origin, .block_zhcn{
+    display: inline-block;
+    margin: 1rem;
+}
+
+.block_zhcn_edit_button{
+    display: inline-block;
+    color: darkgreen;
+}
+
+.block_zhcn_content_list{
+    display: inline-block;
+    border: 1px solid darkgray;
+    margin: 0.25rem;
+}
+
