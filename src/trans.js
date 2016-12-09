@@ -2,17 +2,74 @@ let fs = require("fs");
 let path = require("path");
 
 function skip_string(text, pos){
+    let t,p = text,pos;
+    if(t[p]!='"'){
+        return p;
+    }
+    p++;
+    while(p < t.length){
+        if(t[p]=="\""){
+            if(t[p+1]!="\""){
+                return p+1;
+            }
+        }
+        p++;
+    }
 
-    return pos;
+    return p;
+}
+
+function skip_comment(text, pos){
+    let t,p = text,pos;
+    if(t[p]!="(" || t[p+1]!="*"){
+        return p;
+    }
+    p+=2;
+    while(p < t.length){
+        if(t[p]=="*" && t[p+1]==")"){
+            return p+2;
+        }else if(t[p]=="\""){
+            p = skip_string(t,p);
+        }else{
+            p++;
+        }
+    }
+    return p;
 }
 
 
 function destruct_text(text){
-    return [text];  // TODO
+    let p = 0; let t = text;
+    let r = [];
+    let buff = "";
+    while(p < t.length){
+        if(t[p]=="(" && t[p+1]=="*"){
+            if(buff!=""){
+                r = r.concat(buff);
+                buff = "";
+            }
+
+            let end = skip_comment(t, p);
+            r = r.concat(t.substring(p, end));
+            p = end;
+        }else if(t[p]=='"'){
+            let end = skip_string(t, p);
+            buff = buff.concat(t.substring(p, end));
+            p = end;
+        }else{
+            buff = buff.concat(t[p]);
+            p++;
+        }
+    }
+    if(buff!=""){
+        r = r.concat(buff);
+        buff = "";
+    }
+    return r;
 }
 
 function construct_text(bundle){
-    return bundle[0];  // TODO
+    return bundle.join("");
 }
 
 function translate_bundle(bundle){
