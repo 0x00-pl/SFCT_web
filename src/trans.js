@@ -1,6 +1,11 @@
 let fs = require("fs");
 let path = require("path");
 
+function skip_string(text, pos){
+
+    return pos;
+}
+
 
 function destruct_text(text){
     return [text];  // TODO
