@@ -30,13 +30,14 @@ function skip_comment(text, pos){
             return p+2;
         }else if(t[p]=="\""){
             p = skip_string(t,p);
+        }else if(t[p]=="(" && t[p+1]=="*"){
+            p = skip_comment(t,p);
         }else{
             p++;
         }
     }
     return p;
 }
-
 
 function destruct_text(text){
     let p = 0; let t = text;
@@ -73,7 +74,7 @@ function construct_text(bundle){
 }
 
 function translate_bundle(bundle){
-    return bundle;  // TODO
+    return bundle.map(x=>x);  // TODO
 }
 
 function trans_text(text){
@@ -83,15 +84,17 @@ function trans_text(text){
     return text_new;
 }
 
-
 function trans_file(src_path, dst_path){
     src_path = path.normalize(src_path);
     dst_path = path.normalize(dst_path);
 
     let text = fs.readFileSync(src_path, {encoding:"utf-8"});
-    if(text == null){return "Cannot read file:"+src_path;}
+    if(text == null){
+        return "Cannot read file:"+src_path;
+    }
     let transed_text = trans_text(text);
-    fs.writeFIleSync(dst_path, transed_text, {encoding:"utf-8"});
+    fs.writeFileSync(dst_path, transed_text, {encoding:"utf-8"});
+    return null;
 }
 
 function trans_vfile_dir(src_dir, dst_dir){
