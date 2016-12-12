@@ -26,7 +26,7 @@
                      let box_list = r.find('.block_zhcn_content_list')
                      content_list.forEach(function(v){
                          let box = content_box.clone()
-                         box.text(v)
+                         box.text(v.dst)
                          box_list.append(box)
                      })
                      return r
@@ -40,6 +40,8 @@
                      r.append(tpl.origin_block(extra.block_id, type, origin))
                      if(type == 'text'){
                          r.append(tpl.zhcn_block(i18n))
+                         r.find(".block_zhcn_edit_button")
+                          .click(function(){ edit_box_show(origin) })
                      }
                      return r
                  }
@@ -55,6 +57,16 @@
             loading detail
         </div></div>
         <div class="footer">footer</div>
+        <div id="edit-popup-bg" class="hide">
+            <div id="edit-popup">
+                <div id="edit-src">(*NONE*)</div>
+                <textarea id="edit-dst"></textarea>
+                <div id="edit-buttons">
+                    <div id="edit-commit" onClick='edit_box_commit()'>Commit</div>
+                    <div id="edit-cancle" onClick='edit_box_cancle()'>Cancle</div>
+                </div>
+            </div>
+        </div>
 
         <script>
          //function pre_render(state){
@@ -67,11 +79,11 @@
          $(function(){
              $.ajax({
                  url: '/api/chapter/'+chapter,
-                 type: 'get',
+                 type: 'GET',
                  dataType: 'json',
                  cache: false,
                  success: load_chapter_content_success,
-                 async:true,
+                 async: true,
              });
          })
          function load_chapter_content_success(data){
@@ -80,6 +92,29 @@
              data.forEach(function(v){
                  block_list.append(window.tpl.make_block(v))
              })
+         }
+         function commit_i18n(src,dst){
+             //$.post('/api/i18n', {src, dst}, function(){console.log("sent")})
+             $.ajax({
+                 url: '/api/i18n',
+                 type: 'POST',
+                 cache: false,
+                 contentType : 'application/json',
+                 data: JSON.stringify({src, dst}),
+                 async: true,
+             })
+         }
+         function edit_box_show(src){
+             $("#edit-src").text(src)
+             $("#edit-dst").val(src)
+             $("#edit-popup-bg").removeClass("hide")
+         }
+         function edit_box_commit(){
+             commit_i18n($("#edit-src").text(), $("#edit-dst").val())
+             $("#edit-popup-bg").addClass("hide")
+         }
+         function edit_box_cancle(){
+             $("#edit-popup-bg").addClass("hide")
          }
         </script>
     </body>

@@ -4,13 +4,32 @@ let ccb = require('./ccb.js');
 
 
 let api_router = express.Router();
+//api_router.use(bodyParser.json());
 let db = database.connect_db();
+
+let read_all = function(req, cb){
+    let data = '';
+    req.on('data', function(chunck){ data = data.concat(chunck); });
+    req.on('end', function(){ cb(data); });
+};
 
 api_router.get("/index", function(req, res){
     database.select_text_index(db, function([err, rows]){
         if(err){console.log(err);throw err;}
         res.json(rows);
     });
+});
+
+api_router.post("/i18n", function(req, res){
+    ccb(function(cb){
+        read_all(req, cb);
+    }).then(function(data, cb){
+        data = JSON.parse(data);
+        database.insert_i18n_zhcn(db, data.src, data.dst, cb);
+    }).then(function(r){
+        console.log("[r]: ", r);
+        res.send("{}");
+    }).end()();
 });
 
 api_router.get("/chapter/:chapter", function(req, res){
@@ -62,6 +81,10 @@ api_router.get("/init/insert_test_data", function(req, res){
         database.insert_text_index(db, 0, "chapter#0", cb);
     }).then(function([err,value], cb){
         database.insert_text_origin(db, 0, 0, 'text', '(*text in chapter #0*)', cb);
+    }).then(function([err,value], cb){
+        database.insert_i18n_zhcn(db, '(*text in chapter #0*)', '(*#0里面的字*)', cb);
+    }).then(function([err,value], cb){
+        database.insert_i18n_zhcn(db, '(*text in chapter #0*)', '(*#0的字*)', cb);
     }).then(function([err,value]){
         res.end();
     }).end()();
