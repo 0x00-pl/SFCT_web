@@ -1,8 +1,17 @@
 let fs = require("fs");
 let path = require("path");
 
+let __trans_handler = (x=>x);
+
+function trans_handler(h){
+    if(h != null){
+        __trans_handler = h;
+    }
+    return __trans_handler;
+}
+
 function skip_string(text, pos){
-    let t,p = text,pos;
+    let [t,p] = [text,pos];
     if(t[p]!='"'){
         return p;
     }
@@ -20,7 +29,7 @@ function skip_string(text, pos){
 }
 
 function skip_comment(text, pos){
-    let t,p = text,pos;
+    let [t,p] = [text,pos];
     if(t[p]!="(" || t[p+1]!="*"){
         return p;
     }
@@ -74,7 +83,7 @@ function construct_text(bundle){
 }
 
 function translate_bundle(bundle){
-    return bundle.map(x=>x);  // TODO
+    return bundle.map(__trans_handler);
 }
 
 function trans_text(text){
@@ -97,13 +106,13 @@ function trans_file(src_path, dst_path){
     return null;
 }
 
-function trans_vfile_dir(src_dir, dst_dir){
+function trans_vfile_dir(src_dir, dst_dir, _trans_handler){
+    trans_handler(_trans_handler || (x=>x));
     src_dir = path.normalize(src_dir);
     dst_dir = path.normalize(dst_dir);
-    fs.mkdirSync(dst_dir);
 
     let files = fs.readdirSync(src_dir);
-    let vfiles = files.filter(x => x.endswith(".v"), {encoding:"utf-8"});
+    let vfiles = files.filter(x => x.endsWith(".v"), {encoding:"utf-8"});
     vfiles.forEach(function(v){
         trans_file(path.join(src_dir, v), path.join(dst_dir, v));
     });

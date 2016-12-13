@@ -3,3 +3,4 @@ npm-debug.log
 *.sqlite3
 .#*
 SFCTSource/
+test/vfile_dst/
