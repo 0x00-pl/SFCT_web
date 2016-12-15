@@ -80,11 +80,11 @@ function select_text_origin(db, chapter_id, cb){
            accumulate_args(cb)
           );
 }
-function insert_text_origin(db, chapter_id, block, type, content, cb){
+function insert_text_origin(db, chapter_id, block_id, type, content, cb){
     db.run('insert into text_origin '+
            '(chapter_id, block_id, type, content) '+
            'values(?,?,?,?);',
-           chapter_id, block, type, content,
+           chapter_id, block_id, type, content,
            accumulate_args(cb)
           );
 }

@@ -82,39 +82,49 @@ function construct_text(bundle){
     return bundle.join("");
 }
 
-function translate_bundle(bundle){
-    return bundle.map(__trans_handler);
+function translate_bundle(bundle, src_path){
+    return bundle.map((v,i)=>__trans_handler(v, src_path, i));
 }
 
-function trans_text(text){
+function trans_text(text, src_path){
     let bundle = destruct_text(text);
-    let bundle_new = translate_bundle(bundle);
+    let bundle_new = translate_bundle(bundle, src_path);
     let text_new = construct_text(bundle_new);
     return text_new;
 }
 
 function trans_file(src_path, dst_path){
     src_path = path.normalize(src_path);
-    dst_path = path.normalize(dst_path);
+    if(dst_path != ""){
+        dst_path = path.normalize(dst_path);
+    }
 
     let text = fs.readFileSync(src_path, {encoding:"utf-8"});
     if(text == null){
         return "Cannot read file:"+src_path;
     }
-    let transed_text = trans_text(text);
-    fs.writeFileSync(dst_path, transed_text, {encoding:"utf-8"});
+    let transed_text = trans_text(text, src_path);
+    if(dst_path != ""){
+        fs.writeFileSync(dst_path, transed_text, {encoding:"utf-8"});
+    }
     return null;
 }
 
 function trans_vfile_dir(src_dir, dst_dir, _trans_handler){
     trans_handler(_trans_handler || (x=>x));
     src_dir = path.normalize(src_dir);
-    dst_dir = path.normalize(dst_dir);
+    if(dst_dir != ""){
+        dst_dir = path.normalize(dst_dir);
+    }
 
     let files = fs.readdirSync(src_dir);
     let vfiles = files.filter(x => x.endsWith(".v"), {encoding:"utf-8"});
     vfiles.forEach(function(v){
-        trans_file(path.join(src_dir, v), path.join(dst_dir, v));
+        if(dst_dir != ""){
+            trans_file(path.join(src_dir, v), path.join(dst_dir, v));
+        }else{
+            trans_file(path.join(src_dir, v), "");
+        }
     });
 }
 

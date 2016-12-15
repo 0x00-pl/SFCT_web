@@ -82,9 +82,7 @@ api_router.get("/init/insert_test_data", function(req, res){
     }).then(function([err,value], cb){
         database.insert_text_origin(db, 0, 0, 'text', '(*text in chapter #0*)', cb);
     }).then(function([err,value], cb){
-        database.insert_i18n_zhcn(db, '(*text in chapter #0*)', '(*#0里面的字*)', cb);
-    }).then(function([err,value], cb){
-        database.insert_i18n_zhcn(db, '(*text in chapter #0*)', '(*#0的字*)', cb);
+        database.insert_i18n_zhcn(db, '(*text in chapter #0*)', '(*#0*)', cb);
     }).then(function([err,value]){
         res.end();
     }).end()();
