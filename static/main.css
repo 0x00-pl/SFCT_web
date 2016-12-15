@@ -2,9 +2,7 @@
 .main{
     width: 1024px;
     margin: 0 auto;
-    text-align: center;
     border: 3px solid lightgray;
-
 }
 
 .page_list_item{
@@ -30,6 +28,10 @@
     margin: 1rem;
 }
 
+.block_origin{
+    width: 50%;
+}
+
 .block_zhcn_edit_button{
     display: inline-block;
     color: darkgreen;
@@ -45,7 +47,7 @@
 }
 
 #edit-popup-bg{
-    position: absolute;
+    position: fixed;
     top: 0px; bottom: 0px;
     left: 0px; right: 0px;
     background-color: rgba(1,1,1,0.7);
@@ -54,7 +56,9 @@
     position: relative;
     display: block;
     width: 70%;
-    top: 30%;
+    max-height: 80%;
+    top: 10%;
+    overflow-y: auto;
     padding: 0.25rem 1rem;
     margin: 0 auto;
     background-color: azure;

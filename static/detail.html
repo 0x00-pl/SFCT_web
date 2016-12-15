@@ -11,7 +11,7 @@
                             </div>')
                  return function(block_id, block_type, content){
                      let r = t.clone()
-                     r.find('.block_origin_content').text(content)
+                     r.find('.block_origin_content')[0].innerText = content
                      return r
                  }
              }()
@@ -26,7 +26,7 @@
                      let box_list = r.find('.block_zhcn_content_list')
                      content_list.forEach(function(v){
                          let box = content_box.clone()
-                         box.text(v.dst)
+                         box[0].innerText = v.dst
                          box_list.append(box)
                      })
                      return r
@@ -104,12 +104,12 @@
              })
          }
          function edit_box_show(src){
-             $("#edit-src").text(src)
+             $("#edit-src")[0].innerText = src
              $("#edit-dst").val(src)
              $("#edit-popup-bg").removeClass("hide")
          }
          function edit_box_commit(){
-             commit_i18n($("#edit-src").text(), $("#edit-dst").val())
+             commit_i18n($("#edit-src")[0].innerText, $("#edit-dst").val())
              $("#edit-popup-bg").addClass("hide")
          }
          function edit_box_cancle(){
