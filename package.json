@@ -5,8 +5,11 @@
   "repository": ".",
   "main": "main.js",
   "scripts": {
-    "test": "node_modules/.bin/mocha",
-    "start": "node main.js"
+      "test": "node_modules/.bin/mocha",
+      "start": "node main.js",
+      "init_databse": "node src/init.js init_database",
+      "init_origin": "node src/init.js init_origin",
+      "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql"
   },
   "author": "",
   "license": "ISC",

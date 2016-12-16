@@ -62,8 +62,7 @@ function init_origin_text(db, src_dir, cb){
     }).end()();
 }
 
-function db_init_origin(){
-    let db = database.connect_db();
+function db_init_origin(db){
     ccb(function(cb){
         init_origin_text(db, 'vfile_src/', cb);
     }).then(function(res){
@@ -71,4 +70,15 @@ function db_init_origin(){
     }).end()();
 }
 
-db_init_origin();
+
+if(process.argv.length > 2){
+    let db = database.connect_db();
+    let args = process.argv.slice(2);
+    if(args[0] == 'init_database'){
+        database.create_tables(db, function(err){
+            console.log('[info]: init database with err: ', err);
+        });
+    }else if(args[0] == 'init_origin'){
+        db_init_origin(db);
+    }
+}
