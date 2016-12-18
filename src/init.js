@@ -23,7 +23,7 @@ function call_all_task(task_arr, cb){
     }
 }
 
-function init_origin_text(db, src_dir, cb){
+function trans_vfile_visitor(db, src_dir, index_cb, block_cb, cb){
     let pool = {};
 
     function get_all_text(text, src_path, idx){
@@ -35,38 +35,77 @@ function init_origin_text(db, src_dir, cb){
     let chapter_id = 0;
     let tasks_index = [];
     let tasks_text = [];
-    for(i in pool){
-        let cp_chapter_id = chapter_id;
-        let cp_i = i;
+    for(name in pool){
         tasks_index = tasks_index.concat(
-            (cb1)=>database.insert_text_index(db, cp_chapter_id, cp_i, cb1)
+            index_cb(chapter_id, name)
         );
-        pool[i].forEach(function(v, block_id){
-            let content_type = v.startsWith("(*")? "text": "code";
-            let cp_chapter_id = chapter_id;
-            let cp_block_id = block_id;
-            let cp_v = v;
+        pool[name].forEach(function(content, block_id){
             tasks_text = tasks_text.concat(
-                (cb2)=>database.insert_text_origin(
-                    db, cp_chapter_id, cp_block_id, content_type, cp_v, cb2
-                )
+                block_cb(chapter_id, block_id, content)
             );
         });
         chapter_id++;
     }
-    ccb(function(cb){
-        call_all_task(tasks_index, cb);
-    }).then(function(res, cb){
-        call_all_task(tasks_text, cb);
+    ccb(function(cb1){
+        call_all_task(tasks_index, cb1);
+    }).then(function(index_res, cb2){
+        call_all_task(
+            tasks_text,
+            (block_res)=>cb2([index_res, block_res])
+        );
     }).then(function(res){
+        cb(res);
     }).end()();
 }
 
 function db_init_origin(db){
+
+    function index_cb(chapter_id, name){
+        return (cb)=>database.insert_text_index(db, chapter_id, name, cb);
+    }
+    function block_cb(chapter_id, block_id, content){
+        let content_type = content.startsWith("(*")? "text": "code";
+        return (cb)=>database.insert_text_origin(
+            db, chapter_id, block_id, content_type, content, cb
+        );
+    }
+
     ccb(function(cb){
-        init_origin_text(db, 'vfile_src/', cb);
-    }).then(function(res){
-        console.log('[debug][init_origin]: ', res);
+        trans_vfile_visitor(db, 'vfile_src/', index_cb, block_cb, cb);
+    }).then(function([res1, res2]){
+        console.log('[debug][init_origin]: ', res1, res2);
+    }).end()();
+}
+
+
+function trans_vfiles(db, src_dir, dst_dir){
+    let pool = {};
+
+    function index_cb(chapter_id, name){
+        return (cb)=>cb();
+    }
+    function block_cb(chapter_id, block_id, content){
+        if(content.startsWith("(*")){
+            return (cb)=>database.select_i18n_zhcn(
+                db, content,
+                function([res,err]){
+                    pool[content] = res? res['dst']: content;
+                    cb();
+                }
+            );
+        }else{
+            return (cb)=>cb();
+        }
+    }
+
+    ccb(function(cb){
+        trans_vfile_visitor(db, 'vfile_src/', index_cb, block_cb, cb);
+    }).then(function([res1, res2]){
+
+        trans.trans_vfile_dir(src_dir, dst_dir, function(src){
+            return pool[src] || src;
+        });
+        //console.log('[debug][init_origin]: ', res1, res2);
     }).end()();
 }
 
@@ -80,5 +119,7 @@ if(process.argv.length > 2){
         });
     }else if(args[0] == 'init_origin'){
         db_init_origin(db);
+    }else if(args[0] == 'trans_vfile'){
+        trans_vfiles(db, 'vfile_src', 'vfile_dst');
     }
 }

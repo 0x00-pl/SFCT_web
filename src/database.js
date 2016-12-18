@@ -46,15 +46,9 @@ function create_tables(db, cb){
             ' src text,'+
             ' dst text,'+
             ' votes int default 0'+
-            ')'
-    ).exec(
-        'create table trans_zhcn ('+
-            ' id int primary key,'+
-            ' chapter_id int,'+
-            ' text_origin_id int,'+
-            ' user_id int,'+
-            ' content text'+
-            ')', cb);
+            ')',
+        cb
+    );
 }
 
 function drop_tables(db, cb){
@@ -65,9 +59,7 @@ function drop_tables(db, cb){
     ).exec(
         'drop table text_origin'
     ).exec(
-        'drop table i18n_zhcn'
-    ).exec(
-        'drop table trans_zhcn',
+        'drop table i18n_zhcn',
         cb
     );
 }
@@ -112,22 +104,7 @@ function vote_i18n_zhcn(db, _id, votes, cb){
            accumulate_args(cb)
           );
 }
-function select_text_zhcn(db, chapter_id, cb){
-    db.all('select * from text_zhcn '+
-           'where chapter_id=? '+
-           'limit ?;',
-           chapter_id, 1000,
-           accumulate_args(cb)
-          );
-}
-function insert_text_zhcn(db, chapter_id, block, type, content, cb){
-    db.run('insert into text_zhcn '+
-           '(chapter_id, block_id, type, content) '+
-           'values(?,?,?,?);',
-           chapter_id, block, type, content,
-           accumulate_args(cb)
-          );
-}
+
 function select_text_index(db, cb){
     db.all('select * from chapter '+
            'limit ?;', 1000,
@@ -149,8 +126,6 @@ module.exports = {
     drop_tables,
     insert_text_origin,
     select_text_origin,
-    insert_text_zhcn,
-    select_text_zhcn,
     insert_text_index,
     select_text_index,
     select_i18n_zhcn,

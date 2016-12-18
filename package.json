@@ -9,6 +9,7 @@
       "start": "node main.js",
       "init_databse": "node src/init.js init_database",
       "init_origin": "node src/init.js init_origin",
+      "trans_vfile": "node src/init.js trans_vfile",
       "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql"
   },
   "author": "",
