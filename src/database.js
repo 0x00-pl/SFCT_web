@@ -67,7 +67,7 @@ function drop_tables(db, cb){
 function select_text_origin(db, chapter_id, cb){
     db.all('select * from text_origin '+
            'where chapter_id=? '+
-           'limit ?;',
+           'order by block_id limit ?;',
            chapter_id, 1000,
            accumulate_args(cb)
           );
@@ -107,7 +107,7 @@ function vote_i18n_zhcn(db, _id, votes, cb){
 
 function select_text_index(db, cb){
     db.all('select * from chapter '+
-           'limit ?;', 1000,
+           'order by id limit ?;', 1000,
            accumulate_args(cb)
           );
 }

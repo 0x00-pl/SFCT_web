@@ -1,4 +1,5 @@
 let express = require('express');
+let archiver = require('archiver');
 let database = require('./database.js');
 let ccb = require('./ccb.js');
 
@@ -71,6 +72,17 @@ api_router.get("/chapter/:chapter", function(req, res){
     }).end()();
 });
 
+api_router.get('/vfiles', function(req, res){
+    let filename = 'vfiles.zip';
+    let mimetype = 'application/zip, application/octet-stream';
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    res.setHeader('Content-type', mimetype);
+    let archive = archiver.create('zip', {});
+    archive.pipe(res);
+    archive.directory('vfile_dst').finalize();
+});
+
+/*
 api_router.get("/init/create_db", function(req, res){
     database.create_tables(db, function(err){
         res.end("with"+JSON.stringify(err));
@@ -86,6 +98,6 @@ api_router.get("/init/insert_test_data", function(req, res){
     }).then(function([err,value]){
         res.end();
     }).end()();
-});
+});*/
 
 module.exports = api_router;
