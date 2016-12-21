@@ -1,8 +1,29 @@
 
+.header{
+    width: 1024px;
+    padding: 0.25rem;
+    margin: 0.25rem auto;
+    border-bottom: 3px solid green;
+    background-color: lightgreen;
+}
+.header_location{
+    display: inline-block;
+}
+.header_download_link{
+    display: inline-block;
+    float: right;
+}
+
 .main{
     width: 1024px;
     margin: 0 auto;
     border: 3px solid lightgray;
+}
+
+.code{
+    white-space: pre-wrap;
+    word-break: break-all;
+    font-family: monospace;
 }
 
 .page_list_item{
@@ -25,11 +46,10 @@
 
 .block_origin, .block_zhcn{
     display: inline-block;
-    margin: 1rem;
-}
-
-.block_origin{
+    padding: 1rem;
+    margin: 0;
     width: 50%;
+    box-sizing: border-box;
 }
 
 .block_zhcn_edit_button{
@@ -42,8 +62,9 @@
 }
 .block_zhcn_content{
     display: inline-block;
-    border: 1px solid darkgray;
-    margin: 0.25rem;
+    margin-bottom: 0.25rem;
+    background-color: lightyellow;
+    border-bottom: 1px solid lightgreen;
 }
 
 #edit-popup-bg{

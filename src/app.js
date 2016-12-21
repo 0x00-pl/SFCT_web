@@ -30,7 +30,7 @@ function jsdom_pre_render(html, state, cb){
     });
 }
 
-app.get("/index.html", function(req, res){
+app.get("/", function(req, res){
     new promise(function(cb){
         fs.readFile("static/index.html", function(err,content){cb(content);});
     }).then(function(content){

@@ -7,7 +7,7 @@
              let tpl = {}
              tpl.origin_block = function(){
                  let t = $('<div class="block_origin"> \
-                                <div class="block_origin_content"></div> \
+                                <div class="block_origin_content code"></div> \
                             </div>')
                  return function(block_id, block_type, content){
                      let r = t.clone()
@@ -20,7 +20,7 @@
                                 <div class="block_zhcn_edit_button">edit</div> \
                                 <div class="block_zhcn_content_list"></div> \
                             </div>')
-                 let content_box = $('<div class="block_zhcn_content"></div>')
+                 let content_box = $('<div class="block_zhcn_content code"></div>')
                  return function(content_list){
                      let r = t.clone()
                      let box_list = r.find('.block_zhcn_content_list')
@@ -52,10 +52,21 @@
         </script>
     </head>
     <body>
-        <div class="header"><div><a href="/index.html">Home</a></div></div>
-        <div class="main"><div id="block_list">
-            loading detail
-        </div></div>
+        <div class="header">
+            <div class="header_location">
+                SFCT web page >
+            </div>
+            <div class="header_location">
+                <a href="/">Home</a>
+            </div>
+
+            <div class="header_download_link">
+                <a href="/api/vfiles">download [vfiles.zip]</a>
+            </div>
+        </div>
+            <div class="main"><div id="block_list">
+                loading detail
+            </div></div>
         <div class="footer">footer</div>
         <div id="edit-popup-bg" class="hide">
             <div id="edit-popup">

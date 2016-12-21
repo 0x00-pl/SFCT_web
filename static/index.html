@@ -8,7 +8,7 @@
              tpl.page_list_item = function(){
                  let t = $('<div class="page_list_item"> \
                               <div class="page_list_item_index"></div> \
-                              <a><div class="page_list_item_name"></div></a> \
+                              <a><div class="page_list_item_name code"></div></a> \
                             </div>')
                  return function(idx, name){
                      let r = t.clone()
@@ -36,7 +36,14 @@
         </script>
     </head>
     <body>
-        <div class="header">header</div>
+        <div class="header">
+            <div class="title">
+                SFCT web page
+            </div>
+            <div class="download_link">
+                <a href="/api/vfiles">download [vfiles.zip]</a>
+            </div>
+        </div>
         <div class="main"><div id="page_list">loading index</div></div>
         <div class="footer">footer</div>
 
