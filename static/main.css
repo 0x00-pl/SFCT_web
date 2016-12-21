@@ -1,6 +1,9 @@
+html{
+    font-size: 14px;
+}
 
 .header{
-    width: 1024px;
+    width: 1366px;
     padding: 0.25rem;
     margin: 0.25rem auto;
     border-bottom: 3px solid green;
@@ -15,7 +18,7 @@
 }
 
 .main{
-    width: 1024px;
+    width: 1366px;
     margin: 0 auto;
     border: 3px solid lightgray;
 }
@@ -28,6 +31,7 @@
 
 .page_list_item{
     border-bottom: 1px solid lightcyan;
+    margin: 0.25rem;
 }
 
 .page_list_item_index, .page_list_item_name{
@@ -36,7 +40,8 @@
 }
 .page_list_item_index{
     float: left;
-    margin-left: 1rem;
+    margin: 0 1rem;
+    min-width: 4rem;
 }
 
 .block{
