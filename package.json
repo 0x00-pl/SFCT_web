@@ -3,16 +3,17 @@
   "version": "1.0.0",
   "description": "web gui for SFCT",
   "repository": ".",
-  "main": "main.js",
-  "scripts": {
-    "test": "node_modules/.bin/mocha",
-    "start": "node main.js",
-    "init_databse": "node src/init.js init_database",
-    "init_origin": "node src/init.js init_origin",
-    "trans_vfile": "node src/init.js trans_vfile",
-    "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql"
-  },
-  "author": "",
+    "main": "main.js",
+    "scripts": {
+        "test": "node_modules/.bin/mocha",
+        "start": "node main.js",
+        "init_databse": "node src/init.js init_database",
+        "init_origin": "node src/init.js init_origin",
+        "trans_vfile": "node src/init.js trans_vfile",
+        "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql",
+        "register_into_crontab": "cp daily.sh /etc/cron.daily/SFCT_web.sh"
+    },
+    "author": "",
   "license": "ISC",
   "dependencies": {
     "archiver": "^1.3.0",
