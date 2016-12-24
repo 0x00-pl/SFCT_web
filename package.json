@@ -11,7 +11,7 @@
         "init_origin": "node src/init.js init_origin",
         "trans_vfile": "node src/init.js trans_vfile",
         "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql",
-        "register_into_crontab": "cp daily.sh /etc/cron.daily/SFCT_web.sh"
+        "register_into_crontab": "echo sh $PWD/daily.sh > /etc/cron.daily/SFCT_web.sh && chmod 755 /etc/cron.daily/SFCT_web.sh"
     },
     "author": "",
     "license": "ISC",
