@@ -107,7 +107,8 @@ function vote_i18n_zhcn(db, _id, votes, cb){
 }
 
 function select_text_index(db, cb){
-    db.all('select * from chapter '+
+    db.all('select id, name '+
+           'from chapter '+
            'order by id limit ?;', 1000,
            accumulate_args(cb)
           );

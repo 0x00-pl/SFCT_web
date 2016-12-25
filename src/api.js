@@ -8,6 +8,18 @@ let api_router = express.Router();
 //api_router.use(bodyParser.json());
 let db = database.connect_db();
 
+let cache_transed_count = [];
+
+function get_transed_count(chapter_id, cb){
+    if(cache_transed_count[chapter_id] != null){
+        cb(cache_transed_count[chapter_id]);
+    }else{
+        trans_chapter(chapter_id, function(){
+            cb(cache_transed_count[chapter_id]);
+        });
+    }
+}
+
 let read_all = function(req, cb){
     let data = '';
     req.on('data', function(chunck){ data = data.concat(chunck); });
@@ -15,10 +27,25 @@ let read_all = function(req, cb){
 };
 
 api_router.get("/index", function(req, res){
-    database.select_text_index(db, function([err, rows]){
+    let rows_len = 0;
+    let rows = [];
+
+    ccb(function(cb){
+        database.select_text_index(db, cb);
+    }).then(function([err, rows], cb){
         if(err){console.log(err);throw err;}
+        rows.forEach(function(v, i){
+            get_transed_count(v.id, (counts)=>cb(rows.length, i, Object.assign({}, v, {counts})));
+        });
+    }).then(function(n, i, v, cb){
+        rows[i] = v;
+        rows_len += 1;
+        if(rows_len >= n){
+            cb(rows);
+        }
+    }).then(function(rows){
         res.json(rows);
-    });
+    }).end()();
 });
 
 api_router.post("/i18n", function(req, res){
@@ -33,12 +60,16 @@ api_router.post("/i18n", function(req, res){
     }).end()();
 });
 
-api_router.get("/chapter/:chapter", function(req, res){
+function trans_chapter(chapter_id, cb){
     let blocks = [];
     let blocks_size = 0;
+    let trans_need = 0;
+    let trans_done = 0;
 
     function make_block(origin, i18n_list){
         if(origin.type == 'text'){
+            trans_need += 1;
+            if(i18n_list.length != 0){ trans_done += 1; }
             return {"origin": origin.content, "type": "text", "i18n": i18n_list, "extra": origin};
         }else{
             return {"origin": origin.content, "type": origin.type, "extra": origin};
@@ -46,10 +77,12 @@ api_router.get("/chapter/:chapter", function(req, res){
     }
 
     ccb(function(cb){
-        database.select_text_origin(db, req.params.chapter, cb);
+        database.select_text_origin(db, chapter_id, cb);
     }).then(function([err, rows], cb){
         if(err){console.log(err);throw err;}
         let n = rows.length;
+        if(n==0){cb(0); return;}
+
         rows.forEach(function(v,i){
             if(v.type == 'text'){
                 database.select_i18n_zhcn(db, v.content, function([err,rows]){
@@ -67,9 +100,17 @@ api_router.get("/chapter/:chapter", function(req, res){
         if(blocks_size >= n){
             cb();
         }
-    }).then(function(cb){
-        res.json(blocks);
+    }).then(function(){
+        cache_transed_count[chapter_id] = [trans_done, trans_need];
+        cb(blocks);
     }).end()();
+}
+
+api_router.get("/chapter/:chapter", function(req, res){
+    let chapter_id = req.params.chapter;
+    trans_chapter(chapter_id, function(blocks){
+        res.json(blocks);
+    });
 });
 
 api_router.get('/vfiles', function(req, res){

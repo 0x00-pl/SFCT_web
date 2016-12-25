@@ -9,11 +9,13 @@
                  let t = $('<div class="page_list_item"> \
                               <div class="page_list_item_index"></div> \
                               <a><div class="page_list_item_name code"></div></a> \
+                              <div class="page_list_item_count"></div> \
                             </div>')
-                 return function(idx, name){
+                 return function(idx, name, counts){
                      let r = t.clone()
                      r.find(".page_list_item_index").text(idx)
                      r.find(".page_list_item_name").text(name)
+                     r.find(".page_list_item_count").text(counts[0]+'/'+counts[1])
                      r.find("a").attr("href", "/detail/"+idx)
                      return r
                  }
@@ -28,7 +30,7 @@
                   page_list.empty()
                   data.forEach(function(v,i){
                       page_list.append(
-                          window.tpl.page_list_item(v.id, v.name)
+                          window.tpl.page_list_item(v.id, v.name, v.counts)
                       )
                   })
               })
