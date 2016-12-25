@@ -24,6 +24,7 @@ html{
 }
 
 .code{
+    font-size: 1rem;
     white-space: pre-wrap;
     word-break: break-all;
     font-family: monospace;
@@ -94,8 +95,6 @@ html{
     width: 100%;
     border: 1px solid darkcyan;
     margin: 0.5rem 0;
-    font-size: 1rem;
-    font-family: monospace;
 }
 #edit-dst{
     display: block;
@@ -105,8 +104,6 @@ html{
     margin: 0.5rem 0;
     border: 1px solid green;
     padding: 0;
-    font-size: 1rem;
-    font-family: monospace;
 }
 #edit-buttons{
     display: block;
