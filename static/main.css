@@ -71,6 +71,10 @@ html{
 .block_zhcn_content_list{
     display: inline-block;
 }
+.block_zhcn_id{
+    display: inline-block;
+    color: gray;
+}
 .block_zhcn_content{
     display: inline-block;
     margin-bottom: 0.25rem;

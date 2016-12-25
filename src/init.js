@@ -9,17 +9,22 @@ function append_text(pool, src_path, idx, text){
 
 function call_all_task(task_arr, cb){
     let n = task_arr.length;
-    let m = 0;
     let ret = [];
-    for(var i=0; i<n; i++){
+    if(n==0){
+        cb(ret);
+    }else{
+        let m = 0;
         function cb_handler(v){
-            ret[i] = v;
+            ret[m] = v;
             m++;
+            console.log('[process]: ', m, '/', n);
             if(m >= n){
                 cb(ret);
+            }else{
+                task_arr[m](cb_handler);
             }
         }
-        task_arr[i](cb_handler);
+        task_arr[0](cb_handler);
     }
 }
 
