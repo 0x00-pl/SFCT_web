@@ -121,5 +121,13 @@ if(process.argv.length > 2){
         db_init_origin(db);
     }else if(args[0] == 'trans_vfile'){
         trans_vfiles(db, 'vfile_src', 'vfile_dst');
+    }else if(args[0] == 'vote'){
+        let _id = args[1];
+        let votes = args[2];
+        if(_id && votes){
+            database.vote_i18n_zhcn(db, _id, votes, ()=>console.log('done.'));
+        }else{
+            console.log('usage: npm run vote -- <id> <count>');
+        }
     }
 }

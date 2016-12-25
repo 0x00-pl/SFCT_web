@@ -23,13 +23,13 @@ function debug_pipe(cb){
 function create_tables(db, cb){
     db.exec(
         'create table user ('+
-            ' id int primary key,'+
+            ' id int primary key auto increment,'+
             ' name text,'+
             ' info text'+
             ')'
     ).exec(
         'create table chapter ('+
-            ' id int primary key,'+
+            ' id int primary key auto increment,'+
             ' name text'+
             ')'
     ).exec(
@@ -42,7 +42,7 @@ function create_tables(db, cb){
             ')'
     ).exec(
         'create table i18n_zhcn ('+
-            ' id int primary key,'+
+            ' id int primary key auto increment,'+
             ' src text,'+
             ' dst text,'+
             ' votes int default 0'+

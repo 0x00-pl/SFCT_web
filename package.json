@@ -9,6 +9,7 @@
         "start": "node main.js",
         "init_database": "node src/init.js init_database",
         "init_origin": "node src/init.js init_origin",
+        "vote": "node src/init.js vote",
         "trans_vfile": "node src/init.js trans_vfile",
         "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql",
         "register_into_crontab": "echo sh $PWD/daily.sh > /etc/cron.daily/SFCT_web.sh && chmod 755 /etc/cron.daily/SFCT_web.sh"
