@@ -83,7 +83,8 @@ function insert_text_origin(db, chapter_id, block_id, type, content, cb){
 function select_i18n_zhcn(db, src, cb){
     db.all('select * from i18n_zhcn '+
            'where src=? '+
-           'order by votes desc limit ?;',
+           'order by votes desc, id desc '+
+           'limit ?;',
            src, 1000,
            accumulate_args(cb)
           );
