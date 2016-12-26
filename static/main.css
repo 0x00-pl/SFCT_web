@@ -57,6 +57,7 @@ html{
 
 .block_origin, .block_zhcn{
     display: inline-block;
+    vertical-align: top;
     padding: 1rem;
     margin: 0;
     width: 50%;
@@ -65,14 +66,19 @@ html{
 
 .block_zhcn_edit_button{
     display: inline-block;
+    float: left;
+    width: 4rem;
     color: darkgreen;
 }
 
 .block_zhcn_content_list{
     display: inline-block;
+    width: calc(100% - 4rem);
+    overflow-y: scroll;
 }
 .block_zhcn_id{
     display: inline-block;
+    vertical-align: top;
     color: gray;
 }
 .block_zhcn_content{

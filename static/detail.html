@@ -46,6 +46,12 @@
                          r.append(tpl.zhcn_block(i18n))
                          r.find(".block_zhcn_edit_button")
                           .click(function(){ edit_box_show(origin) })
+
+                         requestAnimationFrame(function(){
+                             let height = r.find('.block_origin_content').height()
+                             let box_list = r.find('.block_zhcn_content_list')
+                             box_list.css('max-height', height*2)
+                         })
                      }
                      return r
                  }
