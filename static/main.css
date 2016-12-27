@@ -55,6 +55,10 @@ html{
     border-bottom: 2px solid lightgray;
 }
 
+.no_trans{
+    background: lightpink;
+}
+
 .block_origin, .block_zhcn{
     display: inline-block;
     vertical-align: top;
