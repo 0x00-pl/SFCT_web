@@ -3,6 +3,8 @@
         <link rel="stylesheet" type="text/css" href="/main.css" />
         <script src="/jquery.js"></script>
         <script>
+         window.global = {counts:[]}
+
          $(function(){
              let tpl = {}
              tpl.page_list_item = function(){
@@ -20,6 +22,22 @@
                      return r
                  }
              }()
+             tpl.footer = function(counts){
+                 let r = $([
+                     '<div class="counts">',
+                     ' <div class="count_done">NaN</div>',
+                     '/',
+                     ' <div class="count_base">NaN</div>',
+                     '</div>'
+                 ].join(''))
+                 let [count_done, count_base] = counts.reduce(function(a, b){
+                     return [a[0]+b[0], a[1]+b[1]]
+                 }, [0,0])
+
+                 r.find('.count_done').text(count_done)
+                 r.find('.count_base').text(count_base)
+                 return r
+             }
              window.tpl = tpl
          });
 
@@ -32,7 +50,13 @@
                       page_list.append(
                           window.tpl.page_list_item(v.id, v.name, v.counts)
                       )
+                      window.global.counts[i] = v.counts
                   })
+                  let footer = $('.footer')
+                  footer.empty()
+                  footer.append(
+                      window.tpl.footer(window.global.counts)
+                  )
               })
          })
         </script>

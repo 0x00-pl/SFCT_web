@@ -46,8 +46,12 @@
                          r.append(tpl.zhcn_block(i18n))
                          r.find(".block_zhcn_edit_button")
                           .click(function(){ edit_box_show(origin) })
+
+                         window.global.counts[1]++
                          if(i18n.length == 0){
                              r.addClass('no_trans')
+                         }else{
+                             window.global.counts[0]++
                          }
 
                          requestAnimationFrame(function(){
@@ -60,6 +64,20 @@
                      return r
                  }
              }()
+
+             tpl.footer = function(count_done, count_base){
+                 let r = $([
+                     '<div class="counts">',
+                     ' <div class="count_done">NaN</div>',
+                     '/',
+                     ' <div class="count_base">NaN</div>',
+                     '</div>'
+                 ].join(''))
+
+                 r.find('.count_done').text(count_done)
+                 r.find('.count_base').text(count_base)
+                 return r
+             }
              window.tpl = tpl
          })
 
@@ -101,6 +119,7 @@
          window.chapter = window.location.pathname
                                 .match('/detail/([0-9]+)')[1]|0
 
+         window.global = { counts: [0,0] }
          $(function(){
              $.ajax({
                  url: '/api/chapter/'+chapter,
@@ -111,12 +130,16 @@
                  async: true,
              });
          })
+
          function load_chapter_content_success(data){
              let block_list = $('#block_list')
              block_list.empty()
              data.forEach(function(v){
                  block_list.append(window.tpl.make_block(v))
              })
+
+             let [count_done, count_base] = window.global.counts
+             set_footer(count_done, count_base)
          }
          function commit_i18n(src,dst){
              $.ajax({
@@ -139,6 +162,14 @@
          }
          function edit_box_cancle(){
              $("#edit-popup-bg").addClass("hide")
+         }
+
+         function set_footer(count_done, count_base){
+             let footer = $('.footer')
+             footer.empty()
+             footer.append(
+                 window.tpl.footer(count_done, count_base)
+             )
          }
         </script>
     </body>

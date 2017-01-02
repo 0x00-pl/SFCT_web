@@ -17,6 +17,25 @@ html{
     float: right;
 }
 
+.footer{
+    width: 1366px;
+    padding: 0.25rem;
+    margin: 0.25rem auto;
+    border-bottom: 3px solid green;
+    background-color: lightgreen;
+    height: 1rem;
+}
+.footer .counts{
+    display: inline-block;
+    float: right;
+}
+.footer .counts .count_done{
+    display: inline-block;
+}
+.footer .counts .count_base{
+    display: inline-block;
+}
+
 .main{
     width: 1366px;
     margin: 0 auto;
