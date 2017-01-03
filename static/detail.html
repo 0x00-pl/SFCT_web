@@ -142,7 +142,7 @@
              set_footer(count_done, count_base)
          }
          function commit_i18n(src,dst){
-             let dst = dst.trim()
+             dst = dst.trim()
              $.ajax({
                  url: '/api/i18n',
                  type: 'POST',
