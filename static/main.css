@@ -53,6 +53,9 @@ html{
     border-bottom: 1px solid lightcyan;
     margin: 0.25rem;
 }
+.page_list_item:hover{
+    background-color: lightgreen;
+}
 
 .page_list_item_index, .page_list_item_name{
     display: inline-block;

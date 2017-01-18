@@ -63,7 +63,7 @@ function trans_vfile_visitor(db, src_dir, index_cb, block_cb, cb){
     }).end()();
 }
 
-function db_init_origin(db){
+function db_init_origin(db, src_dir){
 
     function index_cb(chapter_id, name){
         return (cb)=>database.insert_text_index(db, chapter_id, name, cb);
@@ -76,7 +76,7 @@ function db_init_origin(db){
     }
 
     ccb(function(cb){
-        trans_vfile_visitor(db, 'vfile_src/', index_cb, block_cb, cb);
+        trans_vfile_visitor(db, src_dir, index_cb, block_cb, cb);
     }).then(function([res1, res2]){
         console.log('[debug][init_origin]: ', res1, res2);
     }).end()();
@@ -104,9 +104,8 @@ function trans_vfiles(db, src_dir, dst_dir){
     }
 
     ccb(function(cb){
-        trans_vfile_visitor(db, 'vfile_src/', index_cb, block_cb, cb);
+        trans_vfile_visitor(db, src_dir, index_cb, block_cb, cb);
     }).then(function([res1, res2]){
-
         trans.trans_vfile_dir(src_dir, dst_dir, function(src){
             return pool[src] || src;
         });
@@ -116,6 +115,8 @@ function trans_vfiles(db, src_dir, dst_dir){
 
 
 if(process.argv.length > 2){
+    let src_dir = "SFCTSVN/";
+    let dst_dir = "SFCTSVN_zhcn/";
     let db = database.connect_db();
     let args = process.argv.slice(2);
     if(args[0] == 'init_database'){
@@ -123,9 +124,9 @@ if(process.argv.length > 2){
             console.log('[info]: init database with err: ', err);
         });
     }else if(args[0] == 'init_origin'){
-        db_init_origin(db);
+        db_init_origin(db, src_dir);
     }else if(args[0] == 'trans_vfile'){
-        trans_vfiles(db, 'vfile_src', 'vfile_dst');
+        trans_vfiles(db, src_dir, dst_dir);
     }else if(args[0] == 'vote'){
         let _id = args[1];
         let votes = args[2];

@@ -4,6 +4,6 @@ npm-debug.log
 .#*
 SFCTSource/
 test/vfile_dst/
-vfile_src/
-vfile_dst/
+SFCTSVN/
+SFCTSVN_zhcn/
 backup/

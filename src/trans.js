@@ -1,15 +1,6 @@
 let fs = require("fs");
 let path = require("path");
 
-let __trans_handler = (x=>x);
-
-function trans_handler(h){
-    if(h != null){
-        __trans_handler = h;
-    }
-    return __trans_handler;
-}
-
 function skip_string(text, pos){
     let [t,p] = [text,pos];
     if(t[p]!='"'){
@@ -82,18 +73,18 @@ function construct_text(bundle){
     return bundle.join("");
 }
 
-function translate_bundle(bundle, src_path){
-    return bundle.map((v,i)=>__trans_handler(v, src_path, i));
+function translate_bundle(bundle, src_path, _trans_handler){
+    return bundle.map((v,i)=>_trans_handler(v, src_path, i));
 }
 
-function trans_text(text, src_path){
+function trans_text(text, src_path, _trans_handler){
     let bundle = destruct_text(text);
-    let bundle_new = translate_bundle(bundle, src_path);
+    let bundle_new = translate_bundle(bundle, src_path, _trans_handler);
     let text_new = construct_text(bundle_new);
     return text_new;
 }
 
-function trans_file(src_path, dst_path){
+function trans_file(src_path, dst_path, _trans_handler){
     src_path = path.normalize(src_path);
     if(dst_path != ""){
         dst_path = path.normalize(dst_path);
@@ -103,27 +94,42 @@ function trans_file(src_path, dst_path){
     if(text == null){
         return "Cannot read file:"+src_path;
     }
-    let transed_text = trans_text(text, src_path);
+    let transed_text = trans_text(text, src_path, _trans_handler);
     if(dst_path != ""){
         fs.writeFileSync(dst_path, transed_text, {encoding:"utf-8"});
     }
     return null;
 }
 
+function mkdir_p(path) {
+    if(path==""){ return; }
+    try {
+        fs.mkdirSync(path);
+    } catch(e) {
+        if ( e.code != 'EEXIST' ) throw e;
+    }
+}
+
 function trans_vfile_dir(src_dir, dst_dir, _trans_handler){
-    trans_handler(_trans_handler || (x=>x));
     src_dir = path.normalize(src_dir);
     if(dst_dir != ""){
         dst_dir = path.normalize(dst_dir);
+        mkdir_p(dst_dir);
     }
 
-    let files = fs.readdirSync(src_dir);
-    let vfiles = files.filter(x => x.endsWith(".v"), {encoding:"utf-8"});
-    vfiles.forEach(function(v){
-        if(dst_dir != ""){
-            trans_file(path.join(src_dir, v), path.join(dst_dir, v));
+    let files = fs.readdirSync(src_dir, {encoding:"utf8"});
+    files.forEach(function(name){
+        let src_path = path.join(src_dir, name);
+        let dst_path = dst_dir==""? "": path.join(dst_dir, name);
+
+        let stat = fs.statSync(src_path);
+        if(!stat){ return; }
+        if(stat.isDirectory()){
+            trans_vfile_dir(src_path, dst_path, _trans_handler);
+        }else if(name.endsWith(".v")){
+            trans_file(src_path, dst_path, _trans_handler);
         }else{
-            trans_file(path.join(src_dir, v), "");
+            // ignore
         }
     });
 }
