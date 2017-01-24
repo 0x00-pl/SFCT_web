@@ -17,7 +17,7 @@ function call_all_task(task_arr, cb){
         function cb_handler(v){
             ret[m] = v;
             m++;
-            console.log('[process]: ', m, '/', n);
+            //console.log('[process]: ', m, '/', n);
             if(m >= n){
                 cb(ret);
             }else{
@@ -93,8 +93,10 @@ function trans_vfiles(db, src_dir, dst_dir){
         if(content.startsWith("(*")){
             return (cb)=>database.select_i18n_zhcn(
                 db, content,
-                function([res,err]){
-                    pool[content] = res? res['dst']: content;
+                function([err, res]){
+                    if(res && res.length>0){
+                        pool[content] = res[0]['dst'];
+                    }
                     cb();
                 }
             );
@@ -102,6 +104,7 @@ function trans_vfiles(db, src_dir, dst_dir){
             return (cb)=>cb();
         }
     }
+
 
     ccb(function(cb){
         trans_vfile_visitor(db, src_dir, index_cb, block_cb, cb);

@@ -113,14 +113,24 @@ api_router.get("/chapter/:chapter", function(req, res){
     });
 });
 
-api_router.get('/vfiles', function(req, res){
-    let filename = 'vfiles.zip';
+api_router.get('/download/vfa', function(req, res){
+    let filename = 'vfa.zip';
     let mimetype = 'application/zip, application/octet-stream';
     res.setHeader('Content-disposition', 'attachment; filename=' + filename);
     res.setHeader('Content-type', mimetype);
     let archive = archiver.create('zip', {});
     archive.pipe(res);
-    archive.directory('vfile_dst').finalize();
+    archive.directory('SFCTSVN_zhcn/vfa/full').finalize();
+});
+
+api_router.get('/download/sf', function(req, res){
+    let filename = 'sf.zip';
+    let mimetype = 'application/zip, application/octet-stream';
+    res.setHeader('Content-disposition', 'attachment; filename=' + filename);
+    res.setHeader('Content-type', mimetype);
+    let archive = archiver.create('zip', {});
+    archive.pipe(res);
+    archive.directory('SFCTSVN_zhcn/sf/full').finalize();
 });
 
 /*
