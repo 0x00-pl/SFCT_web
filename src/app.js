@@ -64,8 +64,14 @@ function static_file(file_name){
         }).end()();
     });
 }
+function static_directory(path, url_prefix){
+    app.use(url_prefix, express.static(path));
+}
+
 static_file("jquery.js");
 static_file("main.css");
+static_directory("SFCTSVN_zhcn/sf/full", "/book/sf");
+static_directory("SFCTSVN_zhcn/vfa/full", "/book/vfa");
 
 app.use("/api", api_router);
 

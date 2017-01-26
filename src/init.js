@@ -17,7 +17,7 @@ function call_all_task(task_arr, cb){
         function cb_handler(v){
             ret[m] = v;
             m++;
-            //console.log('[process]: ', m, '/', n);
+            console.log('[process]: ', m, '/', n);
             if(m >= n){
                 cb(ret);
             }else{

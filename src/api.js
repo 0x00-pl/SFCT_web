@@ -55,7 +55,6 @@ api_router.post("/i18n", function(req, res){
         data = JSON.parse(data);
         database.insert_i18n_zhcn(db, data.src, data.dst, cb);
     }).then(function(r){
-        console.log("[r]: ", r);
         res.send("{}");
     }).end()();
 });
