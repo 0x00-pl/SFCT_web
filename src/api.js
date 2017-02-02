@@ -71,7 +71,7 @@ function trans_chapter(chapter_id, cb){
             if(i18n_list.length != 0){ trans_done += 1; }
             return {"origin": origin.content, "type": "text", "i18n": i18n_list, "extra": origin};
         }else{
-            return {"origin": origin.content, "type": origin.type, "extra": origin};
+            return {"origin": "--HIDE--"/*origin.content*/, "type": origin.type, "extra": origin};
         }
     }
 
