@@ -122,8 +122,9 @@
 
          window.global = { counts: [0,0] }
          $(function(){
+             let search = window.location.search
              $.ajax({
-                 url: '/api/chapter/'+chapter,
+                 url: '/api/chapter/' + chapter + search,
                  type: 'GET',
                  dataType: 'json',
                  cache: false,

@@ -14,7 +14,7 @@ function get_transed_count(chapter_id, cb){
     if(cache_transed_count[chapter_id] != null){
         cb(cache_transed_count[chapter_id]);
     }else{
-        trans_chapter(chapter_id, function(){
+        trans_chapter(chapter_id, true, function(){
             cb(cache_transed_count[chapter_id]);
         });
     }
@@ -59,7 +59,7 @@ api_router.post("/i18n", function(req, res){
     }).end()();
 });
 
-function trans_chapter(chapter_id, cb){
+function trans_chapter(chapter_id, show_source, cb){
     let blocks = [];
     let blocks_size = 0;
     let trans_need = 0;
@@ -69,9 +69,18 @@ function trans_chapter(chapter_id, cb){
         if(origin.type == 'text'){
             trans_need += 1;
             if(i18n_list.length != 0){ trans_done += 1; }
-            return {"origin": origin.content, "type": "text", "i18n": i18n_list, "extra": origin};
+            return {
+                "origin": origin.content,
+                "type": "text",
+                "i18n": i18n_list,
+                "extra": origin
+            };
         }else{
-            return {"origin": "--HIDE--"/*origin.content*/, "type": origin.type, "extra": origin};
+            return {
+                "origin": show_source? origin.content: "--HIDE--",
+                "type": origin.type,
+                "extra": origin
+            };
         }
     }
 
@@ -107,7 +116,9 @@ function trans_chapter(chapter_id, cb){
 
 api_router.get("/chapter/:chapter", function(req, res){
     let chapter_id = req.params.chapter;
-    trans_chapter(chapter_id, function(blocks){
+    let password = req.query.password;
+    let authed = password !== undefined;
+    trans_chapter(chapter_id, authed, function(blocks){
         res.json(blocks);
     });
 });
