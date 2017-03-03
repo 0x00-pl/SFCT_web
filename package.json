@@ -1,31 +1,32 @@
 {
-    "name": "sfct_web",
-    "version": "1.0.0",
-    "description": "web gui for SFCT",
-    "repository": ".",
-    "main": "main.js",
-    "scripts": {
-        "test": "node_modules/.bin/mocha",
-        "start": "node main.js",
-        "init_database": "node src/init.js init_database",
-        "init_origin": "node src/init.js init_origin",
-        "vote": "node src/init.js vote",
-        "trans_vfile": "node src/init.js trans_vfile",
-        "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql",
-        "register_into_crontab": "echo sh $PWD/daily.sh > /etc/cron.daily/SFCT_web.sh && chmod 755 /etc/cron.daily/SFCT_web.sh"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "archiver": "^1.3.0",
-        "express": "^4.14.0",
-        "jquery": "^3.1.1",
-        "jsdom": "^9.5.0"
-    },
-    "devDependencies": {
-        "expect.js": "^0.3.1",
-        "mocha": "^3.1.2",
-        "promise": "^7.1.1",
-        "sqlite3": "^3.1.7"
-    }
+  "name": "sfct_web",
+  "version": "1.0.0",
+  "description": "web gui for SFCT",
+  "repository": ".",
+  "main": "main.js",
+  "scripts": {
+    "test": "node_modules/.bin/mocha",
+    "start": "node main.js",
+    "init_database": "node src/init.js init_database",
+    "init_origin": "node src/init.js init_origin",
+    "vote": "node src/init.js vote",
+    "trans_vfile": "node src/init.js trans_vfile",
+    "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql",
+    "register_into_crontab": "echo sh $PWD/daily.sh > /etc/cron.daily/SFCT_web.sh && chmod 755 /etc/cron.daily/SFCT_web.sh"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "archiver": "^1.3.0",
+    "express": "^4.14.0",
+    "jquery": "^3.1.1",
+    "jsdom": "^9.5.0",
+    "pm2": "^2.4.2"
+  },
+  "devDependencies": {
+    "expect.js": "^0.3.1",
+    "mocha": "^3.1.2",
+    "promise": "^7.1.1",
+    "sqlite3": "^3.1.7"
+  }
 }
