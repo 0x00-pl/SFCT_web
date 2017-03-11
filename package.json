@@ -12,7 +12,7 @@
     "vote": "node src/init.js vote",
     "trans_vfile": "node src/init.js trans_vfile",
     "backup": "sqlite3 SFCT.sqlite3 .dump > backup/`date +\"%Y-%m-%d\"`.sql",
-    "register_into_crontab": "echo sh $PWD/daily.sh > /etc/cron.daily/SFCT_web && chmod 755 /etc/cron.daily/SFCT_web"
+    "register_into_crontab": "echo \"#!/bin/sh\nsh $PWD/daily.sh\" > /etc/cron.daily/SFCT_web && chmod 755 /etc/cron.daily/SFCT_web"
   },
   "author": "",
   "license": "ISC",
