@@ -4,66 +4,66 @@
         <script src="/jquery.js"></script>
         <script>
          $(function(){
-             let tpl = {}
+             let tpl = {};
              tpl.origin_block = function(){
                  let t = $('<div class="block_origin"> \
                                 <div class="block_origin_content code"></div> \
-                            </div>')
+                            </div>');
                  return function(block_id, block_type, content){
-                     let r = t.clone()
-                     r.find('.block_origin_content')[0].innerText = content
-                     return r
+                     let r = t.clone();
+                     r.find('.block_origin_content')[0].innerText = content;
+                     return r;
                  }
-             }()
+             }();
              tpl.zhcn_block = function(){
                  let t = $('<div class="block_zhcn"> \
                                 <div class="block_zhcn_edit_button">edit</div> \
                                 <div class="block_zhcn_content_list"></div> \
-                            </div>')
+                            </div>');
                  let content_box = $('<div class="block_zhcn_box"> \
                                           <div class="block_zhcn_id code"></div> \
                                           <div class="block_zhcn_content code"></div> \
-                                      </div>')
+                                      </div>');
                  return function(content_list){
-                     let r = t.clone()
-                     let box_list = r.find('.block_zhcn_content_list')
+                     let r = t.clone();
+                     let box_list = r.find('.block_zhcn_content_list');
                      content_list.forEach(function(v){
-                         let box = content_box.clone()
-                         box.find('.block_zhcn_id').text("#"+v.id)
-                         box.find('.block_zhcn_content')[0].innerText = v.dst
-                         box_list.append(box)
-                     })
-                     return r
+                         let box = content_box.clone();
+                         box.find('.block_zhcn_id').text("#"+v.id);
+                         box.find('.block_zhcn_content')[0].innerText = v.dst;
+                         box_list.append(box);
+                     });
+                     return r;
                  }
-             }()
+             }();
              tpl.make_block = function(){
-                 let t = $('<div class="block"></div>')
+                 let t = $('<div class="block"></div>');
                  return function(block){
-                     let r = t.clone()
-                     let {extra, origin, type, i18n} = block
-                     r.append(tpl.origin_block(extra.block_id, type, origin))
+                     let r = t.clone();
+                     let {extra, origin, type, i18n} = block;
+                     r.append(tpl.origin_block(extra.block_id, type, origin));
                      if(type == 'text'){
-                         r.append(tpl.zhcn_block(i18n))
+                         r.append(tpl.zhcn_block(i18n));
                          r.find(".block_zhcn_edit_button")
-                          .click(function(){ edit_box_show(origin) })
+                          .click(function(){ edit_box_show(origin) });
 
-                         window.global.counts[1]++
+                         window.global.counts[1]++;
                          if(i18n.length == 0){
-                             r.addClass('no_trans')
+                             r.addClass('no_trans');
                          }else{
-                             window.global.counts[0]++
+                             window.global.counts[0]++;
                          }
 
                          requestAnimationFrame(function(){
-                             let bo_height = r.find('.block_origin_content').height()
-                             let box_list = r.find('.block_zhcn_content_list')
-                             let height = Math.min(bo_height*2, bo_height+100)
-                             box_list.css('max-height', height)
-                         })
+                             let bo_height = r.find('.block_origin_content').height();
+                             let box_list = r.find('.block_zhcn_content_list');
+                             let height = Math.min(bo_height*2, bo_height+100);
+                             box_list.css('max-height', height);
+                         });
                      }
-                     return r
+                     return r;
                  }
-             }()
+             }();
 
              tpl.footer = function(count_done, count_base){
                  let r = $([
@@ -72,14 +72,14 @@
                      '/',
                      ' <div class="count_base">NaN</div>',
                      '</div>'
-                 ].join(''))
+                 ].join(''));
 
-                 r.find('.count_done').text(count_done)
-                 r.find('.count_base').text(count_base)
-                 return r
+                 r.find('.count_done').text(count_done);
+                 r.find('.count_base').text(count_base);
+                 return r;
              }
-             window.tpl = tpl
-         })
+             window.tpl = tpl;
+         });
 
         </script>
     </head>
@@ -118,11 +118,11 @@
          //}
 
          window.chapter = window.location.pathname
-                                .match('/detail/([0-9]+)')[1]|0
+                                .match('/detail/([0-9]+)')[1]|0;
 
-         window.global = { counts: [0,0] }
+         window.global = { counts: [0,0] };
          $(function(){
-             let search = window.location.search
+             let search = window.location.search;
              $.ajax({
                  url: '/api/chapter/' + chapter + search,
                  type: 'GET',
@@ -131,17 +131,17 @@
                  success: load_chapter_content_success,
                  async: true,
              });
-         })
+         });
 
          function load_chapter_content_success(data){
-             let block_list = $('#block_list')
-             block_list.empty()
+             let block_list = $('#block_list');
+             block_list.empty();
              data.forEach(function(v){
-                 block_list.append(window.tpl.make_block(v))
+                 block_list.append(window.tpl.make_block(v));
              })
 
-             let [count_done, count_base] = window.global.counts
-             set_footer(count_done, count_base)
+             let [count_done, count_base] = window.global.counts;
+             set_footer(count_done, count_base);
          }
          function commit_i18n(src,dst){
              dst = dst.trim()

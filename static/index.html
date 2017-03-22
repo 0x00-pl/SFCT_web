@@ -3,16 +3,16 @@
         <link rel="stylesheet" type="text/css" href="/main.css" />
         <script src="/jquery.js"></script>
         <script>
-         window.global = {counts:[]}
+         window.global = {counts:[]};
 
          $(function(){
-             let tpl = {}
+             let tpl = {};
              tpl.page_list_item = function(){
                  let t = $('<div class="page_list_item"> \
                               <div class="page_list_item_index"></div> \
                               <a><div class="page_list_item_name code"></div></a> \
                               <div class="page_list_item_count"></div> \
-                            </div>')
+                            </div>');
                  return function(idx, name, counts){
                      let r = t.clone()
                      r.find(".page_list_item_index").text(idx)
@@ -21,7 +21,7 @@
                      r.find("a").attr("href", "/detail/"+idx)
                      return r
                  }
-             }()
+             }();
              tpl.footer = function(counts){
                  let r = $([
                      '<div class="counts">',
@@ -29,36 +29,36 @@
                      '/',
                      ' <div class="count_base">NaN</div>',
                      '</div>'
-                 ].join(''))
+                 ].join(''));
                  let [count_done, count_base] = counts.reduce(function(a, b){
                      return [a[0]+b[0], a[1]+b[1]]
-                 }, [0,0])
+                 }, [0,0]);
 
-                 r.find('.count_done').text(count_done)
-                 r.find('.count_base').text(count_base)
-                 return r
+                 r.find('.count_done').text(count_done);
+                 r.find('.count_base').text(count_base);
+                 return r;
              }
-             window.tpl = tpl
+             window.tpl = tpl;
          });
 
          $(function(){
              $.ajax("/api/index")
               .done(function(data){
-                  let page_list = $("#page_list")
-                  page_list.empty()
+                  let page_list = $("#page_list");
+                  page_list.empty();
                   data.forEach(function(v,i){
                       page_list.append(
                           window.tpl.page_list_item(v.id, v.name, v.counts)
-                      )
-                      window.global.counts[i] = v.counts
-                  })
-                  let footer = $('.footer')
-                  footer.empty()
+                      );
+                      window.global.counts[i] = v.counts;
+                  });
+                  let footer = $('.footer');
+                  footer.empty();
                   footer.append(
                       window.tpl.footer(window.global.counts)
-                  )
-              })
-         })
+                  );
+              });
+         });
         </script>
     </head>
     <body>
