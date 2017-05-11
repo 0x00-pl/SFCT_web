@@ -68,7 +68,7 @@ function select_text_origin(db, chapter_id, cb){
     db.all('select * from text_origin '+
            'where chapter_id=? '+
            'order by block_id limit ?;',
-           chapter_id, 1000,
+           chapter_id, 5000,
            accumulate_args(cb)
           );
 }
@@ -85,7 +85,7 @@ function select_i18n_zhcn(db, src, cb){
            'where src=? '+
            'order by votes desc, id desc '+
            'limit ?;',
-           src, 1000,
+           src, 5000,
            accumulate_args(cb)
           );
 }
@@ -109,7 +109,7 @@ function vote_i18n_zhcn(db, _id, votes, cb){
 function select_text_index(db, cb){
     db.all('select id, name '+
            'from chapter '+
-           'order by id limit ?;', 1000,
+           'order by id limit ?;', 5000,
            accumulate_args(cb)
           );
 }
